@@ -19,6 +19,10 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 카테고리 상태
     _ALREADY_EXIST_CATEGORY(HttpStatus.BAD_REQUEST,"CATEGORY4001","이미 존재하는 카테고리입니다."),
+    _CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND,"CATEGORY4002","카테고리가 없습니다."),
+
+    // 스폰서 상태
+    _ALREADY_EXIST_SPONSOR(HttpStatus.BAD_REQUEST,"SPONSOR4001","이미 존재하는 스폰서입니다."),
 
     ;
 

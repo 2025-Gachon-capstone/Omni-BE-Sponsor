@@ -18,6 +18,9 @@ public class Sponsor extends BaseEntity {
     private Long sponsorId;
 
     @Column(nullable = false)
+    private Long memberId;
+
+    @Column(nullable = false)
     private String sponsorName;
 
     @Column(nullable = false)
