@@ -1,0 +1,33 @@
+package org.example.omnibesponsor.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.example.omnibesponsor.entity.base.BaseEntity;
+
+@Getter
+@Setter
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "Sponsor")
+public class Sponsor extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long sponsorId;
+
+    @Column(nullable = false)
+    private String sponsorName;
+
+    @Column(nullable = false)
+    private String sponsorNumber;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @Version
+    private Long version;
+
+}
