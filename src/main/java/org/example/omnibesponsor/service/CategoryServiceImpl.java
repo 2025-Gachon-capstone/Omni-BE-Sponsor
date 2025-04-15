@@ -4,11 +4,14 @@ import org.example.omnibesponsor.common.apiPayload.code.status.ErrorStatus;
 import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
 import org.example.omnibesponsor.converter.CategoryConverter;
 import org.example.omnibesponsor.dto.CategoryReqDto;
+import org.example.omnibesponsor.dto.CategoryResDto;
 import org.example.omnibesponsor.entity.Category;
 import org.example.omnibesponsor.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -33,4 +36,13 @@ public class CategoryServiceImpl implements CategoryService {
 
         return savedCategory;
     }
+
+    @Override
+    public List<CategoryResDto.GetCategory> getCategories() {
+
+        List<Category> categories = categoryRepository.findAll();
+
+        return CategoryConverter.toGetCategoryDto(categories);
+    }
+
 }

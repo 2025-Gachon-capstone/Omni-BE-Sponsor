@@ -9,6 +9,8 @@ import org.example.omnibesponsor.repository.CategoryRepository;
 import org.example.omnibesponsor.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/sponsor/v1")
 public class CategoryController {
@@ -27,5 +29,15 @@ public class CategoryController {
         return ApiResult.onSuccess(new CategoryResDto.CreateCategory(savedCategory.getCategoryId(),savedCategory.getTitle()));
 
     }
+
+    // 인증 x 화이트 리스트에 추가하기
+    @GetMapping("/categories")
+    @Operation(summary = "카테고리 가져오기 API",description = "회원가입시 필요한 카테고리 목록 가져오기 입니다.", tags = "Category")
+    public ApiResult<List<CategoryResDto.GetCategory>> getCategories(){
+
+        return ApiResult.onSuccess(categoryService.getCategories());
+
+    }
+
 
 }
