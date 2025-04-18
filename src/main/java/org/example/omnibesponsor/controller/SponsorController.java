@@ -21,10 +21,9 @@ public class SponsorController {
 
     @PostMapping("/sponsors")
     @Operation(summary = "스폰서 생성 API",description = "스폰서 생성 API입니다. 서비스 끼리 통신 입니다.",tags = "Service-Sponsor")
-    public ApiResult<?> createSponsor(@RequestBody SponsorReqDto.CreateSponsor CreateSponsorDto){
+    public ApiResult<SponsorResDto.CreateSponsor> createSponsor(@RequestBody SponsorReqDto.CreateSponsor CreateSponsorDto){
 
-        Sponsor savedSponsor = sponsorService.createSponsor(CreateSponsorDto);
-        return ApiResult.onSuccess(SponsorResDto.CreateSponsor.from(savedSponsor));
+        return ApiResult.onSuccess(sponsorService.createSponsor(CreateSponsorDto));
 
     }
 
@@ -34,6 +33,5 @@ public class SponsorController {
 
         return ApiResult.onSuccess(sponsorService.getSponsorId(memberId));
     }
-
 
 }

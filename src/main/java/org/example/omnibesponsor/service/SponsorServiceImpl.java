@@ -23,7 +23,7 @@ public class SponsorServiceImpl implements SponsorService {
     }
 
     @Override
-    public Sponsor createSponsor(SponsorReqDto.CreateSponsor createSponsorDto) {
+    public SponsorResDto.CreateSponsor createSponsor(SponsorReqDto.CreateSponsor createSponsorDto) {
 
         if (sponsorRepository.existsByMemberId(createSponsorDto.getMemberId())) {
             throw new GeneralException(ErrorStatus._ALREADY_EXIST_SPONSOR);
@@ -36,7 +36,7 @@ public class SponsorServiceImpl implements SponsorService {
 
         Sponsor savedSponsor = sponsorRepository.save(sponsor);
 
-        return savedSponsor;
+        return SponsorResDto.CreateSponsor.from(savedSponsor);
     }
 
     @Override
