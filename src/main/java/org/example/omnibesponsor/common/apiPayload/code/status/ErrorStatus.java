@@ -23,7 +23,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 스폰서 상태
     _ALREADY_EXIST_SPONSOR(HttpStatus.BAD_REQUEST,"SPONSOR4001","이미 존재하는 스폰서입니다."),
-
+    _NOT_FOUND_SPONSOR(HttpStatus.NOT_FOUND,"SPONSOR4002","없는 스폰서입니다."),
     ;
 
     private final HttpStatus httpStatus;

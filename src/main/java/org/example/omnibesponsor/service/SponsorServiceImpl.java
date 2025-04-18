@@ -4,6 +4,7 @@ import org.example.omnibesponsor.common.apiPayload.code.status.ErrorStatus;
 import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
 import org.example.omnibesponsor.converter.SponsorConverter;
 import org.example.omnibesponsor.dto.SponsorReqDto;
+import org.example.omnibesponsor.dto.SponsorResDto;
 import org.example.omnibesponsor.entity.Category;
 import org.example.omnibesponsor.entity.Sponsor;
 import org.example.omnibesponsor.repository.CategoryRepository;
@@ -37,4 +38,15 @@ public class SponsorServiceImpl implements SponsorService {
 
         return savedSponsor;
     }
+
+    @Override
+    public SponsorResDto.GetSponsorId getSponsorId(Long memberId) {
+
+        Sponsor sponsor = sponsorRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_SPONSOR));
+
+        return new SponsorResDto.GetSponsorId(sponsor.getSponsorId());
+    }
+
+
 }
