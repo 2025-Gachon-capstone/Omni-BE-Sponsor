@@ -23,7 +23,7 @@ public class CategoryController {
     }
 
     @PostMapping("/categories")
-    @Operation(summary = "카테고리 생성 API",description = "카테고리 생성 API 입니다. 중복은 안됩니다.", tags = "Category")
+    @Operation(summary = "카테고리 생성 API",description = "카테고리 생성 API 입니다. 중복은 안됩니다. - ( 사용 안함 x )", tags = "Category")
     public ApiResult<CategoryResDto.CreateCategory> createCategory(@Valid @RequestBody CategoryReqDto.CreateCategory createCategoryDto){
 
         Category savedCategory = categoryService.createCategory(createCategoryDto);
@@ -33,7 +33,7 @@ public class CategoryController {
 
     // 인증 x 화이트 리스트에 추가하기
     @GetMapping("/categories")
-    @Operation(summary = "카테고리 가져오기 API",description = "회원가입시 필요한 카테고리 목록 가져오기 입니다.", tags = "Category")
+    @Operation(summary = "카테고리 가져오기 API",description = "회원가입시 필요한 카테고리 목록 가져오기 입니다. ( 인증 필요없음 )", tags = "Category")
     public ApiResult<List<CategoryResDto.GetCategory>> getCategories(){
 
         return ApiResult.onSuccess(categoryService.getCategories());
