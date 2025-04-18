@@ -31,4 +31,14 @@ public class SponsorResDto {
 
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetSponsorId {
+
+        private Long SponsorId;
+
+    }
+
 }

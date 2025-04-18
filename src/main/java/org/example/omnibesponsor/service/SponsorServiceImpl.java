@@ -4,6 +4,7 @@ import org.example.omnibesponsor.common.apiPayload.code.status.ErrorStatus;
 import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
 import org.example.omnibesponsor.converter.SponsorConverter;
 import org.example.omnibesponsor.dto.SponsorReqDto;
+import org.example.omnibesponsor.dto.SponsorResDto;
 import org.example.omnibesponsor.entity.Category;
 import org.example.omnibesponsor.entity.Sponsor;
 import org.example.omnibesponsor.repository.CategoryRepository;
@@ -22,7 +23,7 @@ public class SponsorServiceImpl implements SponsorService {
     }
 
     @Override
-    public Sponsor createSponsor(SponsorReqDto.CreateSponsor createSponsorDto) {
+    public SponsorResDto.CreateSponsor createSponsor(SponsorReqDto.CreateSponsor createSponsorDto) {
 
         if (sponsorRepository.existsByMemberId(createSponsorDto.getMemberId())) {
             throw new GeneralException(ErrorStatus._ALREADY_EXIST_SPONSOR);
@@ -35,6 +36,17 @@ public class SponsorServiceImpl implements SponsorService {
 
         Sponsor savedSponsor = sponsorRepository.save(sponsor);
 
-        return savedSponsor;
+        return SponsorResDto.CreateSponsor.from(savedSponsor);
     }
+
+    @Override
+    public SponsorResDto.GetSponsorId getSponsorId(Long memberId) {
+
+        Sponsor sponsor = sponsorRepository.findByMemberId(memberId)
+                .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_SPONSOR));
+
+        return new SponsorResDto.GetSponsorId(sponsor.getSponsorId());
+    }
+
+
 }
