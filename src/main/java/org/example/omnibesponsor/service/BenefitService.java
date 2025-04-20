@@ -1,0 +1,7 @@
+package org.example.omnibesponsor.service;
+
+import org.example.omnibesponsor.dto.BenefitResDto;
+
+public interface BenefitService {
+    BenefitResDto.CreateBenefit createBenefit(Long memberId, Long sponsorId);
+}

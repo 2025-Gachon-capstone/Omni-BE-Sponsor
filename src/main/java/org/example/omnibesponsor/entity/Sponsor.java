@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.omnibesponsor.entity.base.BaseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -32,5 +35,8 @@ public class Sponsor extends BaseEntity {
 
     @Version
     private Long version;
+
+    @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Benefit> benefits = new ArrayList<>();
 
 }
