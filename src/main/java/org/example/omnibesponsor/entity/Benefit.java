@@ -40,6 +40,7 @@ public class Benefit extends BaseEntity {
 
     private String targetMember;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     private BenefitStatus status = BenefitStatus.PENDING;
 
