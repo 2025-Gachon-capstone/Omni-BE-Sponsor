@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 
 public class BenefitResDto {
 
@@ -18,4 +20,18 @@ public class BenefitResDto {
         private Long benefitId;
 
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UpdateBenefit{
+
+        private Long benefitId;
+        private String title;
+        private String benefitStatus;
+
+    }
+
+
 }

@@ -2,6 +2,8 @@ package org.example.omnibesponsor.service;
 
 import org.example.omnibesponsor.common.apiPayload.code.status.ErrorStatus;
 import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
+import org.example.omnibesponsor.converter.BenefitConverter;
+import org.example.omnibesponsor.dto.BenefitReqDto;
 import org.example.omnibesponsor.dto.BenefitResDto;
 import org.example.omnibesponsor.entity.Benefit;
 import org.example.omnibesponsor.entity.Sponsor;
@@ -42,6 +44,23 @@ public class BenefitServiceImpl implements BenefitService {
         sponsor.getBenefits().add(savedBenefit);
 
         return new BenefitResDto.CreateBenefit(sponsor.getSponsorId(),savedBenefit.getBenefitId());
+    }
+
+    @Override
+    public BenefitResDto.UpdateBenefit updateBenefit(Long memeberId, Long benefitId, BenefitReqDto.UpdateBenefit updateBenefitDto) {
+
+        Benefit benefit = benefitRepository.findById(benefitId)
+                .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_BENEFIT));
+
+        if(!benefit.getSponsor().getMemberId().equals(memeberId)){
+            throw new GeneralException(ErrorStatus._SPONSOR_FORBIDDEN);
+        }
+
+        Benefit updatedBenefit = BenefitConverter.updateBenefit(benefit, updateBenefitDto);
+
+        Benefit savedBenefit = benefitRepository.save(updatedBenefit);
+
+        return BenefitConverter.toUpdateBenefit(savedBenefit);
     }
 
 }

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import org.example.omnibesponsor.common.apiPayload.ApiResult;
+import org.example.omnibesponsor.dto.BenefitReqDto;
 import org.example.omnibesponsor.dto.BenefitResDto;
 import org.example.omnibesponsor.dto.CategoryReqDto;
 import org.example.omnibesponsor.dto.CategoryResDto;
@@ -25,10 +26,22 @@ public class BenefitController {
     @Operation(summary = "혜택 생성 API",
             description = "채팅방 생성시 자동으로 생성됩니다. ReqeustParam을 이용해 sponsorId 입력해주세요. - ( 엑세스 토큰 필요 )",
             tags = "Benefit")
-    public ApiResult<BenefitResDto.CreateBenefit> createCategory(@Parameter(hidden = true) @RequestHeader("X-Authorization-Id") Long memberId,
+    public ApiResult<BenefitResDto.CreateBenefit> createBenefit(@Parameter(hidden = true) @RequestHeader("X-Authorization-Id") Long memberId,
                                                    @RequestParam Long sponsorId){
 
         return ApiResult.onSuccess(benefitService.createBenefit(memberId,sponsorId));
+
+    }
+
+    @PatchMapping("/{benefitId}")
+    @Operation(summary = "혜택 갱신 API",
+            description = " status에 PENDING이 아닌 값이 올 경우 최종 제출입니다. - ( 엑세스 토큰 필요 )",
+            tags = "Benefit")
+    public ApiResult<BenefitResDto.UpdateBenefit> updateBenefit(@Parameter(hidden = true) @RequestHeader("X-Authorization-Id") Long memberId,
+                                      @PathVariable Long benefitId,
+                                      @RequestBody BenefitReqDto.UpdateBenefit updateBenefitDto){
+
+        return ApiResult.onSuccess(benefitService.updateBenefit(memberId,benefitId,updateBenefitDto));
 
     }
 
