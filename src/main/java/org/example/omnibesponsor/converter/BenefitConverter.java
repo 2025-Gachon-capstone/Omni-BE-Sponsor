@@ -7,6 +7,15 @@ import org.example.omnibesponsor.entity.type.BenefitStatus;
 
 public class BenefitConverter {
 
+    public static BenefitResDto.GetBenefit toGetBenefit(Benefit benefit) {
+
+        return BenefitResDto.GetBenefit.builder()
+                .benefitId(benefit.getBenefitId())
+                .amount(benefit.getAmount())
+                .benefitStatus(String.valueOf(benefit.getStatus()))
+                .build();
+    }
+
     public static Benefit updateBenefit(Benefit benefit, BenefitReqDto.UpdateBenefit dto){
 
         if (dto.getTitle() != null) benefit.setTitle(dto.getTitle());
