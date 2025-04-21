@@ -22,7 +22,7 @@ public class BenefitController {
         this.benefitService = benefitService;
     }
 
-    @PostMapping()
+    @PostMapping
     @Operation(summary = "혜택 생성 API",
             description = "채팅방 생성시 자동으로 생성됩니다. ReqeustParam을 이용해 sponsorId 입력해주세요. - ( 엑세스 토큰 필요 )",
             tags = "Benefit")
@@ -30,6 +30,16 @@ public class BenefitController {
                                                    @RequestParam Long sponsorId){
 
         return ApiResult.onSuccess(benefitService.createBenefit(memberId,sponsorId));
+
+    }
+
+    @GetMapping("/{benefitId}")
+    @Operation(summary = "혜택 가져오기 API",
+            description = "서비스 통신 입니다.",
+            tags = "Service-Benefit")
+    public ApiResult<BenefitResDto.GetBenefit> getBenefit(@PathVariable Long benefitId) {
+
+        return ApiResult.onSuccess(benefitService.getBenefit(benefitId));
 
     }
 

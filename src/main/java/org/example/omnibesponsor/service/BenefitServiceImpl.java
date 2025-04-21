@@ -52,6 +52,15 @@ public class BenefitServiceImpl implements BenefitService {
     }
 
     @Override
+    public BenefitResDto.GetBenefit getBenefit(Long benefitId) {
+
+        Benefit benefit = benefitRepository.findById(benefitId)
+                .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_BENEFIT));
+
+        return BenefitConverter.toGetBenefit(benefit);
+    }
+
+    @Override
     @Transactional
     public BenefitResDto.UpdateBenefit updateBenefit(Long memeberId, Long benefitId, BenefitReqDto.UpdateBenefit updateBenefitDto) {
 

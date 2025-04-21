@@ -25,6 +25,18 @@ public class BenefitResDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class GetBenefit{
+
+        private Long benefitId;
+        private int amount;
+        private String benefitStatus;
+
+    }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UpdateBenefit{
 
         private Long benefitId;
