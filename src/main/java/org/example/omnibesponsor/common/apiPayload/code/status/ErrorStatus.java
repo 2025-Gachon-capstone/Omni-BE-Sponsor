@@ -57,6 +57,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 혜택 상태
     _NOT_FOUND_BENEFIT(HttpStatus.NOT_FOUND,"BENEFIT4001","혜택이 없습니다."),
+    _ALREADY_DELETED_BENEFIT(HttpStatus.BAD_REQUEST,"BENEFIT4002","이미 삭제된 혜택입니다."),
 
     // 서비스 상태
     _USER_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"SERVICE5000","USER 서버 에러"),

@@ -33,5 +33,16 @@ public class BenefitResDto {
 
     }
 
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeleteBenefit{
+
+        private Long benefitId;
+        private String benefitStatus;
+
+    }
+
 
 }

@@ -45,4 +45,15 @@ public class BenefitController {
 
     }
 
+    @DeleteMapping("/{benefitId}")
+    @Operation(summary = "혜택 삭제 API",
+            description = " 삭제시 상태가 DELETE로 변경됩니다. - ( 엑세스 토큰 필요 )",
+            tags = "Benefit")
+    public ApiResult<BenefitResDto.DeleteBenefit> deleteBenefit(@Parameter(hidden = true) @RequestHeader("X-Authorization-Id") Long memberId,
+                                                                @PathVariable Long benefitId){
+
+        return ApiResult.onSuccess(benefitService.deleteBenefit(memberId,benefitId));
+
+    }
+
 }

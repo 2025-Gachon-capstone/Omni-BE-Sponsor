@@ -47,6 +47,7 @@ public class BenefitServiceImpl implements BenefitService {
     }
 
     @Override
+    @Transactional
     public BenefitResDto.UpdateBenefit updateBenefit(Long memeberId, Long benefitId, BenefitReqDto.UpdateBenefit updateBenefitDto) {
 
         Benefit benefit = benefitRepository.findById(benefitId)
@@ -61,6 +62,28 @@ public class BenefitServiceImpl implements BenefitService {
         Benefit savedBenefit = benefitRepository.save(updatedBenefit);
 
         return BenefitConverter.toUpdateBenefit(savedBenefit);
+    }
+
+    @Override
+    @Transactional
+    public BenefitResDto.DeleteBenefit deleteBenefit(Long memeberId, Long benefitId) {
+
+        Benefit benefit = benefitRepository.findById(benefitId)
+                .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_BENEFIT));
+
+        if(!benefit.getSponsor().getMemberId().equals(memeberId)){
+            throw new GeneralException(ErrorStatus._SPONSOR_FORBIDDEN);
+        }
+
+        if(benefit.getStatus() == BenefitStatus.DELETED){
+            throw new GeneralException(ErrorStatus._ALREADY_DELETED_BENEFIT);
+        }
+
+        benefit.setStatus(BenefitStatus.DELETED);
+
+        Benefit deletedBenefit = benefitRepository.save(benefit);
+
+        return BenefitConverter.toDeleteBenefit(deletedBenefit);
     }
 
 }

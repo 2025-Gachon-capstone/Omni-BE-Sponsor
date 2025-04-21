@@ -31,4 +31,14 @@ public class BenefitConverter {
                 .build();
 
     }
+
+    public static BenefitResDto.DeleteBenefit toDeleteBenefit(Benefit benefit){
+
+        return BenefitResDto.DeleteBenefit.builder()
+                .benefitId(benefit.getBenefitId())
+                .benefitStatus(String.valueOf(benefit.getStatus()))
+                .build();
+
+    }
+
 }
