@@ -1,11 +1,13 @@
 package org.example.omnibesponsor.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.example.omnibesponsor.client.CardClient;
 import org.example.omnibesponsor.common.apiPayload.code.status.ErrorStatus;
 import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
 import org.example.omnibesponsor.converter.BenefitConverter;
 import org.example.omnibesponsor.dto.BenefitReqDto;
 import org.example.omnibesponsor.dto.BenefitResDto;
+import org.example.omnibesponsor.dto.CardBenefitReqDto;
 import org.example.omnibesponsor.entity.Benefit;
 import org.example.omnibesponsor.entity.Sponsor;
 import org.example.omnibesponsor.entity.type.BenefitStatus;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,10 +26,13 @@ public class BenefitServiceImpl implements BenefitService {
 
     private final SponsorRepository sponsorRepository;
     private final BenefitRepository benefitRepository;
+    private final CardClient cardClient;
 
-    public BenefitServiceImpl(SponsorRepository sponsorRepository, BenefitRepository benefitRepository) {
+    public BenefitServiceImpl(SponsorRepository sponsorRepository, BenefitRepository benefitRepository,
+                              CardClient cardClient) {
         this.sponsorRepository = sponsorRepository;
         this.benefitRepository = benefitRepository;
+        this.cardClient = cardClient;
     }
 
     @Override
@@ -102,14 +108,19 @@ public class BenefitServiceImpl implements BenefitService {
 
     @Override
     @Transactional
-    public void updateOngoingBenefits() {
+    public List<CardBenefitReqDto.SyncCardBenefit> updateOngoingBenefits() {
 
         LocalDate today = LocalDate.now();
+        List<CardBenefitReqDto.SyncCardBenefit> syncList = new ArrayList<>();
         try {
             List<Benefit> targetBenefits = benefitRepository.findOngoingTargets(today);
 
             for (Benefit benefit : targetBenefits) {
                 benefit.setStatus(BenefitStatus.ONGOING);
+                syncList.add(new CardBenefitReqDto.SyncCardBenefit(
+                        benefit.getBenefitId(),
+                        BenefitStatus.ONGOING.name()
+                ));
             }
 
             benefitRepository.saveAll(targetBenefits);
@@ -118,18 +129,24 @@ public class BenefitServiceImpl implements BenefitService {
         } catch (Exception e) {
             log.error("[스케줄러] ONGOING 상태 업데이트 실패: {}", e.getMessage(), e);
         }
+        return syncList;
     }
 
     @Override
     @Transactional
-    public void updateExpiredBenefits() {
+    public List<CardBenefitReqDto.SyncCardBenefit> updateExpiredBenefits() {
 
         LocalDate today = LocalDate.now();
+        List<CardBenefitReqDto.SyncCardBenefit> syncList = new ArrayList<>();
         try {
             List<Benefit> targetBenefits = benefitRepository.findExpiredTargets(today);
 
             for (Benefit benefit : targetBenefits) {
                 benefit.setStatus(BenefitStatus.EXPIRED);
+                syncList.add(new CardBenefitReqDto.SyncCardBenefit(
+                        benefit.getBenefitId(),
+                        BenefitStatus.EXPIRED.name()
+                ));
             }
 
             benefitRepository.saveAll(targetBenefits);
@@ -138,7 +155,27 @@ public class BenefitServiceImpl implements BenefitService {
         } catch (Exception e) {
             log.error("[스케줄러] EXPIRED 상태 업데이트 실패: {}", e.getMessage(), e);
         }
+        return syncList;
+    }
 
+    @Override
+    public void updateAllAndSyncBenefits() {
+        log.info("[트랜잭션] 혜택 + 카드혜택 상태 동기화 시작");
+
+        List<CardBenefitReqDto.SyncCardBenefit> syncList = new ArrayList<>();
+
+        syncList.addAll(updateOngoingBenefits());
+        syncList.addAll(updateExpiredBenefits());
+
+        try {
+            cardClient.syncCardBenefits(syncList);
+            log.info("[트랜잭션] 카드 서비스 상태 동기화 성공 ({}건)", syncList.size());
+        } catch (Exception e) {
+            log.error("[트랜잭션] 카드 서비스 동기화 실패 - 롤백 진행", e);
+            throw new GeneralException(ErrorStatus._CARD_SERVICE_ERROR); // 전체 롤백 유도
+        }
+
+        log.info("[트랜잭션] 전체 혜택 동기화 완료");
     }
 
 }
