@@ -9,6 +9,7 @@ import java.util.List;
 public interface BenefitService {
     BenefitResDto.CreateBenefit createBenefit(Long memberId, Long sponsorId);
     BenefitResDto.GetBenefit getBenefit(Long benefitId);
+    List<BenefitResDto.GetBatchBenefit> getBatchBenefit(List<Long> benefitIds);
     BenefitResDto.UpdateBenefit updateBenefit(Long memeberId, Long benefitId, BenefitReqDto.UpdateBenefit updateBenefitDto);
     BenefitResDto.DeleteBenefit deleteBenefit(Long memeberId, Long benefitId);
     List<CardBenefitReqDto.SyncCardBenefit> updateOngoingBenefits();
