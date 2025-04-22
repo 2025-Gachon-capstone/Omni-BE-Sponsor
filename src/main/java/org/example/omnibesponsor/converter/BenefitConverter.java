@@ -5,6 +5,9 @@ import org.example.omnibesponsor.dto.BenefitResDto;
 import org.example.omnibesponsor.entity.Benefit;
 import org.example.omnibesponsor.entity.type.BenefitStatus;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class BenefitConverter {
 
     public static BenefitResDto.GetBenefit toGetBenefit(Benefit benefit) {
@@ -13,6 +16,18 @@ public class BenefitConverter {
                 .benefitId(benefit.getBenefitId())
                 .amount(benefit.getAmount())
                 .benefitStatus(String.valueOf(benefit.getStatus()))
+                .build();
+    }
+
+    public static BenefitResDto.GetBatchBenefit toGetBatchBenefit(Benefit benefit){
+
+        return BenefitResDto.GetBatchBenefit.builder()
+                .benefitId(benefit.getBenefitId())
+                .title(benefit.getTitle())
+                .sponsorName(benefit.getSponsor().getSponsorName())
+                .discountRate(benefit.getDiscountRate())
+                .endDate(benefit.getEndDate())
+                .amount(benefit.getAmount())
                 .build();
     }
 

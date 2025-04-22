@@ -12,6 +12,8 @@ import org.example.omnibesponsor.entity.Category;
 import org.example.omnibesponsor.service.BenefitService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/sponsor/v1/benefits")
 public class BenefitController {
@@ -41,6 +43,14 @@ public class BenefitController {
 
         return ApiResult.onSuccess(benefitService.getBenefit(benefitId));
 
+    }
+
+    @PostMapping("/batch")
+    @Operation(summary = "혜택 목록 조회", description = "benefitId 리스트로 혜택 정보 일괄 조회 - ( 서비스 끼리 통신입니다. ) ", tags = "Service-Benefit")
+    public ApiResult<List<BenefitResDto.GetBatchBenefit>> getBenefitList(@RequestBody List<Long> benefitIds) {
+
+        return ApiResult.onSuccess(benefitService.getBatchBenefit(benefitIds));
+        
     }
 
     @PatchMapping("/{benefitId}")

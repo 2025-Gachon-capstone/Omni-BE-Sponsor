@@ -49,6 +49,7 @@ public class BenefitServiceImpl implements BenefitService {
         Benefit benefit = Benefit.builder()
                 .sponsor(sponsor)
                 .status(BenefitStatus.PENDING)
+                .discountRate(0f)
                 .build();
 
         Benefit savedBenefit = benefitRepository.save(benefit);
@@ -65,6 +66,17 @@ public class BenefitServiceImpl implements BenefitService {
 
         return BenefitConverter.toGetBenefit(benefit);
     }
+
+    @Override
+    @Transactional
+    public List<BenefitResDto.GetBatchBenefit> getBatchBenefit(List<Long> benefitIds) {
+        List<Benefit> benefits = benefitRepository.findAllById(benefitIds);
+
+        return benefits.stream()
+                .map(BenefitConverter::toGetBatchBenefit)
+                .toList();
+    }
+
 
     @Override
     @Transactional
