@@ -27,8 +27,9 @@ public class Product extends BaseEntity {
 
     private String imageUrl;
 
-    @Column(nullable = false)
-    private Long sponsorId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sponsor_id")
+    private Sponsor sponsor;
 
     @Version
     private Long version;
