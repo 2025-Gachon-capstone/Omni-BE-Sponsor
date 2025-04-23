@@ -1,0 +1,36 @@
+package org.example.omnibesponsor.entity;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.example.omnibesponsor.entity.base.BaseEntity;
+
+import java.math.BigDecimal;
+
+@Getter
+@Setter
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "Product")
+public class Product extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
+
+    @Column(nullable = false)
+    private String productName;
+
+    @Column(nullable = false)
+    private BigDecimal productPrice;
+
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private Long sponsorId;
+
+    @Version
+    private Long version;
+
+}
