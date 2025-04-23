@@ -39,7 +39,4 @@ public class Sponsor extends BaseEntity {
     @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Benefit> benefits = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sponsor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> products = new ArrayList<>();
-
 }
