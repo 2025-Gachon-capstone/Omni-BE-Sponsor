@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class ProductResDto {
 
@@ -20,4 +21,34 @@ public class ProductResDto {
         private BigDecimal productPrice;
 
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetProduct {
+
+        private Long productId;
+        private String productName;
+        private BigDecimal productPrice;
+        private String categoryTitle;
+        private String sponsorName;
+        private String imageUrl;
+
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetProductPage{
+
+        List<ProductResDto.GetProduct> products;
+        boolean isFirst;
+        boolean isLast;
+        int pageSize;
+        long totalElements;
+
+    }
+
 }

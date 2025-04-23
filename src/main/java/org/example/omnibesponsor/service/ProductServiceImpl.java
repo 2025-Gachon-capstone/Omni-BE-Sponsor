@@ -9,7 +9,10 @@ import org.example.omnibesponsor.entity.Product;
 import org.example.omnibesponsor.entity.Sponsor;
 import org.example.omnibesponsor.repository.ProductRepository;
 import org.example.omnibesponsor.repository.SponsorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -23,13 +26,28 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductResDto.CreateProduct createProduct(ProductReqDto.CreateProduct createProduct) {
 
         Sponsor sponsor = sponsorRepository.findById(createProduct.getSponsorId())
                 .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_SPONSOR));
 
-        Product savedProduct = productRepository.save(ProductConverter.CreatProduct(createProduct,sponsor));
+        Product savedProduct = productRepository.save(ProductConverter.creatProduct(createProduct,sponsor));
 
-        return ProductConverter.ToCreateProduct(savedProduct);
+        return ProductConverter.toCreateProduct(savedProduct);
+    }
+
+    @Override
+    public ProductResDto.GetProductPage getProducts(Long categoryId, Pageable pageable) {
+
+        Page<Product> products;
+
+        if (categoryId != null) {
+            products = productRepository.findBySponsor_Category_CategoryId(categoryId, pageable);
+        } else {
+            products = productRepository.findAll(pageable);
+        }
+
+        return ProductConverter.toGetProductPage(products);
     }
 }
