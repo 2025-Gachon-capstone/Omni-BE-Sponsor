@@ -50,4 +50,14 @@ public class ProductServiceImpl implements ProductService {
 
         return ProductConverter.toGetProductPage(products);
     }
+
+    @Override
+    public ProductResDto.GetProduct getDetailProduct(Long productId) {
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(()->new GeneralException(ErrorStatus._NOT_FOUND_PRODUCT));
+
+        return ProductConverter.toGetProduct(product);
+
+    }
 }
