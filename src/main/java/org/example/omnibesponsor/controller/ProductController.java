@@ -26,7 +26,7 @@ public class ProductController {
     @Operation(summary = "상품 생성 API",
             description = " 더미데이터 사용 예정 - ( 엑세스 토큰 필요 )",
             tags = "Product")
-    public ApiResult<ProductResDto.CreateProduct> createBenefit(@RequestBody ProductReqDto.CreateProduct createProduct) {
+    public ApiResult<ProductResDto.CreateProduct> createProduct(@RequestBody ProductReqDto.CreateProduct createProduct) {
 
         return ApiResult.onSuccess(productService.createProduct(createProduct));
 
@@ -36,10 +36,20 @@ public class ProductController {
     @Operation(summary = "전체 상품 가져오기 API",
             description = " 페이징 필요 - ( page, size 만 적어도 됨, 스웨거에서 sort 는 배열이 아닌 빈문자열로 넣어주세요, 카테고리별 요청시 카테고리 id도 입력해주세요. ) - ( 토큰 필요 없음 )",
             tags = "Product")
-    public ApiResult<ProductResDto.GetProductPage> getBenefit(@RequestParam(required = false) Long categoryId,
+    public ApiResult<ProductResDto.GetProductPage> getProduct(@RequestParam(required = false) Long categoryId,
                                    @PageableDefault(size = 8, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
         return ApiResult.onSuccess(productService.getProducts(categoryId, pageable));
+
+    }
+
+    @GetMapping("/{productId}")
+    @Operation(summary = "상세 상품 가져오기 API",
+            description = " ( 토큰 필요 없음 )",
+            tags = "Product")
+    public ApiResult<ProductResDto.GetProduct> getDetailProduct(@PathVariable Long productId) {
+
+        return ApiResult.onSuccess(productService.getDetailProduct(productId));
 
     }
 
