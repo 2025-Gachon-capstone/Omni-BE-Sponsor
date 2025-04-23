@@ -28,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
         Sponsor sponsor = sponsorRepository.findById(createProduct.getSponsorId())
                 .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_SPONSOR));
 
-        Product savedProduct = productRepository.save(ProductConverter.CreatProduct(createProduct));
+        Product savedProduct = productRepository.save(ProductConverter.CreatProduct(createProduct,sponsor));
 
         return ProductConverter.ToCreateProduct(savedProduct);
     }
