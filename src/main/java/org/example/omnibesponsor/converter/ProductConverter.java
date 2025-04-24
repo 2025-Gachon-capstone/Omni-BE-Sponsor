@@ -57,4 +57,20 @@ public class ProductConverter {
                 .build();
     }
 
+    public static ProductResDto.GetProductList toGetProductList(Product product) {
+
+        return ProductResDto.GetProductList.builder()
+                .productId(product.getProductId())
+                .productName(product.getProductName())
+                .productPrice(product.getProductPrice())
+                .build();
+    }
+
+    public static List<ProductResDto.GetProductList> toGetProductList(List<Product> products){
+
+        return products.stream()
+                .map(ProductConverter::toGetProductList)
+                .collect(Collectors.toList());
+    }
+
 }

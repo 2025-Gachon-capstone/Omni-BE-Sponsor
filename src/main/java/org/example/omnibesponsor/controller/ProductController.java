@@ -16,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/sponsor/v1/products")
 public class ProductController {
@@ -65,6 +67,20 @@ public class ProductController {
     public ApiResult<ProductResDto.GetProduct> getDetailProduct(@PathVariable Long productId) {
 
         return ApiResult.onSuccess(productService.getDetailProduct(productId));
+
+    }
+
+    @PostMapping("/list")
+    @Operation(summary = "리스트로 상품 가져오기 API",
+            description = " 서비스 끼리 통신입니다. ",
+            tags = "Service-Product")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "COMMON200-성공",content = @Content(schema = @Schema(implementation = ApiResult.class))),
+            @ApiResponse(responseCode = "4001", description = "PRODUCT4001-상품이 없습니다.",content = @Content(schema = @Schema(implementation = ApiResult.class))),
+    })
+    public ApiResult<List<ProductResDto.GetProductList>> getProductList(@RequestBody ProductReqDto.GetProductList getProductList) {
+
+        return ApiResult.onSuccess(productService.getProductList(getProductList));
 
     }
 
