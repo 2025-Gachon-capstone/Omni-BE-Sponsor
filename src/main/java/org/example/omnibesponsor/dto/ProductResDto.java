@@ -51,4 +51,16 @@ public class ProductResDto {
 
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetProductList{
+
+        private Long productId;
+        private String productName;
+        private BigDecimal productPrice;
+
+    }
+
 }

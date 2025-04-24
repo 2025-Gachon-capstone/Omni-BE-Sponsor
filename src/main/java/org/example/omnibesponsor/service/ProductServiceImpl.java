@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -59,5 +61,16 @@ public class ProductServiceImpl implements ProductService {
 
         return ProductConverter.toGetProduct(product);
 
+    }
+
+    @Override
+    public List<ProductResDto.GetProductList> getProductList(ProductReqDto.GetProductList getProductList) {
+        List<Product> products = productRepository.findAllById(getProductList.getProductIds());
+
+        if (products.isEmpty()) {
+            throw new GeneralException(ErrorStatus._NOT_FOUND_PRODUCT);
+        }
+
+        return ProductConverter.toGetProductList(products);
     }
 }
