@@ -15,6 +15,7 @@ spring:
 cors:
   urls:
     httpsGatewayURL: ${HTTPS_GATEWAY_URL}
+    frontURL: ${FRONT_URL}
 
 springdoc:
   api-docs:

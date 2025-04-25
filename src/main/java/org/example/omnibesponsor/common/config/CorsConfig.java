@@ -11,6 +11,10 @@ public class CorsConfig {
     @Value("${cors.urls.httpsGatewayURL}")
     private String httpsGatewayURL;
 
+    @Value("${cors.urls.frontURL}")
+    private String frontURL;
+
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -18,7 +22,8 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                                httpsGatewayURL
+                                httpsGatewayURL,
+                                frontURL
                         )
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
