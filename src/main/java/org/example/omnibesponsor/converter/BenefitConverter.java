@@ -28,6 +28,7 @@ public class BenefitConverter {
                 .discountRate(benefit.getDiscountRate())
                 .endDate(benefit.getEndDate())
                 .amount(benefit.getAmount())
+                .targetProduct(benefit.getTargetProduct())
                 .build();
     }
 
