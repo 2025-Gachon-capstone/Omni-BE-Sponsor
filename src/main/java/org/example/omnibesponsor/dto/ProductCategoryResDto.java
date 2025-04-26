@@ -18,4 +18,15 @@ public class ProductCategoryResDto {
 
     }
 
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetProductCategory {
+
+        private Long productCategoryId;
+        private String name;
+
+    }
+
 }

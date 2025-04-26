@@ -10,6 +10,8 @@ import org.example.omnibesponsor.repository.ProductCategoryRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProductCategoryServiceImpl implements ProductCategoryService {
 
@@ -32,5 +34,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
         return new ProductCategoryResDto.CreateProductCategory(savedProductCategory.getProductCategoryId(), savedProductCategory.getName());
 
+    }
+
+    @Override
+    public List<ProductCategoryResDto.GetProductCategory> getAllProductCategories() {
+
+        List<ProductCategory> productCategories = productCategoryRepository.findAll();
+
+        return ProductCategoryConverter.getProductCategory(productCategories);
     }
 }
