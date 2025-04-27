@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProductService {
 
     ProductResDto.CreateProduct createProduct(ProductReqDto.CreateProduct createProduct);
-    ProductResDto.GetProductPage getProducts(Long categoryId,Pageable pageable);
+    ProductResDto.GetProductPage getProducts(Long productCategoryId,Pageable pageable);
     ProductResDto.GetProduct getDetailProduct(@PathVariable Long productId);
     List<ProductResDto.GetProductList> getProductList(ProductReqDto.GetProductList getProductList);
 }

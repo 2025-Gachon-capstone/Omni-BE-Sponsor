@@ -11,6 +11,7 @@ public class ProductReqDto {
     public static class CreateProduct{
 
         private Long sponsorId;
+        private Long productCategoryId;
         private String productName;
         private BigDecimal productPrice;
 

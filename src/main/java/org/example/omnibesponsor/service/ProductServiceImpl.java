@@ -6,7 +6,9 @@ import org.example.omnibesponsor.converter.ProductConverter;
 import org.example.omnibesponsor.dto.ProductReqDto;
 import org.example.omnibesponsor.dto.ProductResDto;
 import org.example.omnibesponsor.entity.Product;
+import org.example.omnibesponsor.entity.ProductCategory;
 import org.example.omnibesponsor.entity.Sponsor;
+import org.example.omnibesponsor.repository.ProductCategoryRepository;
 import org.example.omnibesponsor.repository.ProductRepository;
 import org.example.omnibesponsor.repository.SponsorRepository;
 import org.springframework.data.domain.Page;
@@ -21,10 +23,13 @@ public class ProductServiceImpl implements ProductService {
 
     private final SponsorRepository sponsorRepository;
     private final ProductRepository productRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
-    public ProductServiceImpl(SponsorRepository sponsorRepository, ProductRepository productRepository) {
+    public ProductServiceImpl(SponsorRepository sponsorRepository, ProductRepository productRepository,
+                              ProductCategoryRepository productCategoryRepository) {
         this.sponsorRepository = sponsorRepository;
         this.productRepository = productRepository;
+        this.productCategoryRepository = productCategoryRepository;
     }
 
     @Override
@@ -34,18 +39,23 @@ public class ProductServiceImpl implements ProductService {
         Sponsor sponsor = sponsorRepository.findById(createProduct.getSponsorId())
                 .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_SPONSOR));
 
-        Product savedProduct = productRepository.save(ProductConverter.creatProduct(createProduct,sponsor));
+        ProductCategory productCategory = productCategoryRepository.findById(createProduct.getProductCategoryId())
+                .orElseThrow(()-> new GeneralException(ErrorStatus._NOT_FOUND_PRODUCTCATEGORY));
+
+        Product savedProduct = productRepository.save(ProductConverter.createProduct(createProduct,sponsor,productCategory));
+
+        productCategory.getProducts().add(savedProduct);
 
         return ProductConverter.toCreateProduct(savedProduct);
     }
 
     @Override
-    public ProductResDto.GetProductPage getProducts(Long categoryId, Pageable pageable) {
+    public ProductResDto.GetProductPage getProducts(Long productCategoryId, Pageable pageable) {
 
         Page<Product> products;
 
-        if (categoryId != null) {
-            products = productRepository.findBySponsor_Category_CategoryId(categoryId, pageable);
+        if (productCategoryId != null) {
+            products = productRepository.findByProductCategory_ProductCategoryId(productCategoryId, pageable);
         } else {
             products = productRepository.findAll(pageable);
         }

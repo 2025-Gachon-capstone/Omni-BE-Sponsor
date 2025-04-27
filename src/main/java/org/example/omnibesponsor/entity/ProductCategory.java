@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.example.omnibesponsor.entity.base.BaseEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -19,6 +22,10 @@ public class ProductCategory extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "productCategory", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Product> products = new ArrayList<>();
 
     @Version
     private Long version;
