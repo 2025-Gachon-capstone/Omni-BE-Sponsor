@@ -34,7 +34,8 @@ public class ProductController {
             tags = "Product")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "COMMON200-성공",content = @Content(schema = @Schema(implementation = ApiResult.class))),
-            @ApiResponse(responseCode = "4002", description = "SPONSOR4002-없는 스폰서입니다.",content = @Content(schema = @Schema(implementation = ApiResult.class))),
+            @ApiResponse(responseCode = "4002-1", description = "SPONSOR4002-없는 스폰서입니다.",content = @Content(schema = @Schema(implementation = ApiResult.class))),
+            @ApiResponse(responseCode = "4002-2", description = "PRODUCTCATEGORY4002-없는 상품 카테고리입니다.",content = @Content(schema = @Schema(implementation = ApiResult.class))),
     })
     public ApiResult<ProductResDto.CreateProduct> createProduct(@RequestBody ProductReqDto.CreateProduct createProduct) {
 

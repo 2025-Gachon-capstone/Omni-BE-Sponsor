@@ -3,6 +3,7 @@ package org.example.omnibesponsor.converter;
 import org.example.omnibesponsor.dto.ProductReqDto;
 import org.example.omnibesponsor.dto.ProductResDto;
 import org.example.omnibesponsor.entity.Product;
+import org.example.omnibesponsor.entity.ProductCategory;
 import org.example.omnibesponsor.entity.Sponsor;
 import org.springframework.data.domain.Page;
 
@@ -11,13 +12,14 @@ import java.util.stream.Collectors;
 
 public class ProductConverter {
 
-    public static Product creatProduct(ProductReqDto.CreateProduct createProduct, Sponsor sponsor) {
+    public static Product createProduct(ProductReqDto.CreateProduct createProduct, Sponsor sponsor, ProductCategory productCategory) {
 
         return Product.builder()
                 .productName(createProduct.getProductName())
                 .productPrice(createProduct.getProductPrice())
                 .imageUrl("defaultImageUrl")
                 .sponsor(sponsor)
+                .productCategory(productCategory)
                 .build();
     }
 
@@ -25,6 +27,7 @@ public class ProductConverter {
 
         return ProductResDto.CreateProduct.builder()
                 .productId(product.getProductId())
+                .productCategoryId(product.getProductCategory().getProductCategoryId())
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
                 .build();

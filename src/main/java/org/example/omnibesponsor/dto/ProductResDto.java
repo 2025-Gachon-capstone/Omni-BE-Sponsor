@@ -17,8 +17,10 @@ public class ProductResDto {
     public static class CreateProduct {
 
         private Long productId;
+        private Long productCategoryId;
         private String productName;
         private BigDecimal productPrice;
+
 
     }
 

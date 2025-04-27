@@ -64,6 +64,7 @@ public enum ErrorStatus implements BaseErrorCode {
 
     // 상품 카테고리 상태
     _ALREADY_EXIST_PRODUCTCATEGORY(HttpStatus.BAD_REQUEST,"PRODUCTCATEGORY4001","이미 존재하는 상품 카테고리입니다."),
+    _NOT_FOUND_PRODUCTCATEGORY(HttpStatus.NOT_FOUND,"PRODUCTCATEGORY4002","없는 상품 카테고리입니다."),
 
     // 서비스 상태
     _USER_SERVICE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,"SERVICE5000","USER 서버 에러"),

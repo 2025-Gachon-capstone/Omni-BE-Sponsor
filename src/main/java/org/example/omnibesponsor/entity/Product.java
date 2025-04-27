@@ -31,6 +31,10 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "sponsor_id")
     private Sponsor sponsor;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_category_id")
+    private ProductCategory productCategory;
+
     @Version
     private Long version;
 
