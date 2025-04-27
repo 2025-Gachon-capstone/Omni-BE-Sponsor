@@ -45,15 +45,15 @@ public class ProductController {
 
     @GetMapping
     @Operation(summary = "전체 상품 가져오기 API",
-            description = " 페이징 필요 - ( page, size 만 적어도 됨, 스웨거에서 sort 는 배열이 아닌 빈문자열로 넣어주세요, 카테고리별 요청시 카테고리 id도 입력해주세요. ) - ( 토큰 필요 없음 )",
+            description = " 페이징 필요 - ( page, size 만 적어도 됨, 스웨거에서 sort 는 배열이 아닌 빈문자열로 넣어주세요, 상품 카테고리별 요청시 상품 카테고리 id도 입력해주세요. ) - ( 토큰 필요 없음 )",
             tags = "Product")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "COMMON200-성공",content = @Content(schema = @Schema(implementation = ApiResult.class))),
     })
-    public ApiResult<ProductResDto.GetProductPage> getProduct(@RequestParam(required = false) Long categoryId,
+    public ApiResult<ProductResDto.GetProductPage> getProduct(@RequestParam(required = false) Long productCategoryId,
                                    @PageableDefault(size = 8, sort = "updatedAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        return ApiResult.onSuccess(productService.getProducts(categoryId, pageable));
+        return ApiResult.onSuccess(productService.getProducts(productCategoryId, pageable));
 
     }
 

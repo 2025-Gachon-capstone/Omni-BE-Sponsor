@@ -50,12 +50,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResDto.GetProductPage getProducts(Long categoryId, Pageable pageable) {
+    public ProductResDto.GetProductPage getProducts(Long productCategoryId, Pageable pageable) {
 
         Page<Product> products;
 
-        if (categoryId != null) {
-            products = productRepository.findBySponsor_Category_CategoryId(categoryId, pageable);
+        if (productCategoryId != null) {
+            products = productRepository.findByProductCategory_ProductCategoryId(productCategoryId, pageable);
         } else {
             products = productRepository.findAll(pageable);
         }

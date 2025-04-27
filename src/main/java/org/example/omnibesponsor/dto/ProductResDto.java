@@ -33,7 +33,7 @@ public class ProductResDto {
         private Long productId;
         private String productName;
         private BigDecimal productPrice;
-        private String categoryTitle;
+        private String productCategoryName;
         private String sponsorName;
         private String imageUrl;
 

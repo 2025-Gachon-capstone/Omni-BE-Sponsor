@@ -39,7 +39,7 @@ public class ProductConverter {
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
-                .categoryTitle(product.getSponsor().getCategory().getTitle())
+                .productCategoryName(product.getProductCategory().getName())
                 .sponsorName(product.getSponsor().getSponsorName())
                 .imageUrl(product.getImageUrl())
                 .build();
