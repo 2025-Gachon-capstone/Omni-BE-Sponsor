@@ -46,6 +46,7 @@ public class BenefitResDto {
         private Float discountRate;
         private LocalDate endDate;
         private int amount;
+        private String targetProduct;
 
     }
 
