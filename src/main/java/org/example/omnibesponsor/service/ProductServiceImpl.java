@@ -75,11 +75,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResDto.GetProductList> getProductList(ProductReqDto.GetProductList getProductList) {
-        List<Product> products = productRepository.findAllById(getProductList.getProductIds());
 
-        if (products.isEmpty()) {
-            throw new GeneralException(ErrorStatus._NOT_FOUND_PRODUCT);
-        }
+        List<Product> products = productRepository.findAllById(getProductList.getProductIds());
 
         return ProductConverter.toGetProductList(products);
     }
