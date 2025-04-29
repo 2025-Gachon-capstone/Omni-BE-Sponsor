@@ -66,6 +66,7 @@ public class ProductConverter {
                 .productId(product.getProductId())
                 .productName(product.getProductName())
                 .productPrice(product.getProductPrice())
+                .sponsorName(product.getSponsor().getSponsorName())
                 .build();
     }
 
