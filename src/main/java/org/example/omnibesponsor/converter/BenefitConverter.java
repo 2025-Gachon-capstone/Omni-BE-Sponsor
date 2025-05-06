@@ -5,6 +5,7 @@ import org.example.omnibesponsor.dto.BenefitResDto;
 import org.example.omnibesponsor.entity.Benefit;
 import org.example.omnibesponsor.entity.type.BenefitStatus;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,8 +42,21 @@ public class BenefitConverter {
         if (dto.getTargetProduct() != null) benefit.setTargetProduct(dto.getTargetProduct());
         if (dto.getAmount() != null) benefit.setAmount(dto.getAmount());
         if (dto.getTargetMember() != null) benefit.setTargetMember(dto.getTargetMember());
-        if (!"PENDING".equals(dto.getStatus())) benefit.setStatus(BenefitStatus.BEFORE);
+        if (dto.getStatus() != null) {
+            String requestedStatus = dto.getStatus();
 
+            if ("PENDING".equals(requestedStatus)) {
+                benefit.setStatus(BenefitStatus.PENDING);
+            } else {
+                LocalDate startDate = dto.getStartDate() != null ? dto.getStartDate() : benefit.getStartDate();
+
+                if (startDate == null || LocalDate.now().isBefore(startDate)) {
+                    benefit.setStatus(BenefitStatus.BEFORE);
+                } else {
+                    benefit.setStatus(BenefitStatus.ONGOING);
+                }
+            }
+        }
         return benefit;
 
     }
