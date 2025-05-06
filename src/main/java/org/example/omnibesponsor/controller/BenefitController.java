@@ -77,6 +77,8 @@ public class BenefitController {
             @ApiResponse(responseCode = "200", description = "COMMON200-성공",content = @Content(schema = @Schema(implementation = ApiResult.class))),
             @ApiResponse(responseCode = "4001", description = "BENEFIT4001-혜택이 없습니다.",content = @Content(schema = @Schema(implementation = ApiResult.class))),
             @ApiResponse(responseCode = "4003", description = "SPONSOR4003-잘못된 스폰서입니다.",content = @Content(schema = @Schema(implementation = ApiResult.class))),
+            @ApiResponse(responseCode = "4004", description = "CARD4004-카드혜택이 이미존재합니다.",content = @Content(schema = @Schema(implementation = ApiResult.class))),
+            @ApiResponse(responseCode = "5001", description = "SERVICE5001-CARD 서버 에러",content = @Content(schema = @Schema(implementation = ApiResult.class))),
     })
     public ApiResult<BenefitResDto.UpdateBenefit> updateBenefit(@Parameter(hidden = true) @RequestHeader("X-Authorization-Id") Long memberId,
                                       @PathVariable Long benefitId,

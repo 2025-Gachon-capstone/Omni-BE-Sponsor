@@ -42,6 +42,7 @@ public enum ErrorStatus implements BaseErrorCode {
     _CARD_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,"CARD4001","이미 존재하는 사용자입니다."),
     _NOT_FOUND_CARD(HttpStatus.NOT_FOUND,"CARD4002","사용자의 카드가 없습니다."),
     _NOT_MATCH_CARDPASSWORD(HttpStatus.BAD_REQUEST,"CARD4003","카드비밀번호가 일치하지 않습니다."),
+    _ALREADY_EXIST_CARDBENEFIT(HttpStatus.BAD_REQUEST,"CARD4004","카드혜택이 이미존재합니다."),
     _CARD_NUMBER_GENERATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"CARD5001","중복된 카드 번호로 인한 생성 실패입니다."),
     _CARD_CREATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR,"CARD5002","카드 생성 실패입니다."),
 

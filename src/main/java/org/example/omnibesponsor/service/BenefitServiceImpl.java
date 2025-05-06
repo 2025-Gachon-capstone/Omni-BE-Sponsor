@@ -1,7 +1,9 @@
 package org.example.omnibesponsor.service;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.omnibesponsor.client.CardClient;
+import org.example.omnibesponsor.common.apiPayload.ApiResult;
 import org.example.omnibesponsor.common.apiPayload.code.status.ErrorStatus;
 import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
 import org.example.omnibesponsor.converter.BenefitConverter;
@@ -89,8 +91,34 @@ public class BenefitServiceImpl implements BenefitService {
             throw new GeneralException(ErrorStatus._SPONSOR_FORBIDDEN);
         }
 
-        Benefit updatedBenefit = BenefitConverter.updateBenefit(benefit, updateBenefitDto);
+        // 상태 변경 검증 (카드혜택 존재 여부에 따라 예외 처리)
+        if (updateBenefitDto.getStatus() != null) {
+            String requestedStatus = updateBenefitDto.getStatus();
+            BenefitStatus currentStatus = benefit.getStatus();
 
+            boolean cardBenefitExists;
+
+            try {
+                ApiResult<Boolean> response = cardClient.existsByBenefitId(benefitId);
+
+                if (!response.getIsSuccess()) {
+                    throw new GeneralException(ErrorStatus._CARD_SERVICE_ERROR); // 응답 실패 (code != COMMON200)
+                }
+
+                cardBenefitExists = response.getResult();
+
+            } catch (FeignException e) {
+                // 카드 서비스 자체와 통신 실패 (5xx, 연결 실패 등)
+                throw new GeneralException(ErrorStatus._CARD_SERVICE_ERROR);
+            }
+
+            if (cardBenefitExists && "PENDING".equals(requestedStatus) && currentStatus != BenefitStatus.PENDING) {
+                throw new GeneralException(ErrorStatus._ALREADY_EXIST_CARDBENEFIT);
+            }
+        }
+
+        // 상태 검증을 통과한 후 변환
+        Benefit updatedBenefit = BenefitConverter.updateBenefit(benefit, updateBenefitDto);
         Benefit savedBenefit = benefitRepository.save(updatedBenefit);
 
         return BenefitConverter.toUpdateBenefit(savedBenefit);
