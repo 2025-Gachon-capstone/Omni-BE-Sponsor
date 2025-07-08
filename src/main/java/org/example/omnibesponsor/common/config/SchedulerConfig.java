@@ -2,8 +2,6 @@ package org.example.omnibesponsor.common.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.omnibesponsor.client.CardClient;
-import org.example.omnibesponsor.dto.CardBenefitReqDto;
 import org.example.omnibesponsor.service.BenefitService;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
