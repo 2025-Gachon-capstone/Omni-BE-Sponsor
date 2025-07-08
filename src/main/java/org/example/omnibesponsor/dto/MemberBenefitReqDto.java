@@ -5,13 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class CardBenefitReqDto {
+public class MemberBenefitReqDto {
 
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SyncCardBenefit{
+    public static class SyncMemberBenefit{
 
         private Long benefitId;
         private String newStatus;

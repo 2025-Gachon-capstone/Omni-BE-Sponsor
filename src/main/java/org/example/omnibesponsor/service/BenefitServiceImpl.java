@@ -2,14 +2,14 @@ package org.example.omnibesponsor.service;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
-import org.example.omnibesponsor.client.CardClient;
+import org.example.omnibesponsor.client.UserClient;
 import org.example.omnibesponsor.common.apiPayload.ApiResult;
 import org.example.omnibesponsor.common.apiPayload.code.status.ErrorStatus;
 import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
 import org.example.omnibesponsor.converter.BenefitConverter;
 import org.example.omnibesponsor.dto.BenefitReqDto;
 import org.example.omnibesponsor.dto.BenefitResDto;
-import org.example.omnibesponsor.dto.CardBenefitReqDto;
+import org.example.omnibesponsor.dto.MemberBenefitReqDto;
 import org.example.omnibesponsor.entity.Benefit;
 import org.example.omnibesponsor.entity.Sponsor;
 import org.example.omnibesponsor.entity.type.BenefitStatus;
@@ -28,13 +28,13 @@ public class BenefitServiceImpl implements BenefitService {
 
     private final SponsorRepository sponsorRepository;
     private final BenefitRepository benefitRepository;
-    private final CardClient cardClient;
+    private final UserClient userClient;
 
     public BenefitServiceImpl(SponsorRepository sponsorRepository, BenefitRepository benefitRepository,
-                              CardClient cardClient) {
+                              UserClient userClient) {
         this.sponsorRepository = sponsorRepository;
         this.benefitRepository = benefitRepository;
-        this.cardClient = cardClient;
+        this.userClient = userClient;
     }
 
     @Override
@@ -96,23 +96,23 @@ public class BenefitServiceImpl implements BenefitService {
             String requestedStatus = updateBenefitDto.getStatus();
             BenefitStatus currentStatus = benefit.getStatus();
 
-            boolean cardBenefitExists;
+            boolean memberBenefitExists;
 
             try {
-                ApiResult<Boolean> response = cardClient.existsByBenefitId(benefitId);
+                ApiResult<Boolean> response = userClient.existsByBenefitId(benefitId);
 
                 if (!response.getIsSuccess()) {
-                    throw new GeneralException(ErrorStatus._CARD_SERVICE_ERROR); // 응답 실패 (code != COMMON200)
+                    throw new GeneralException(ErrorStatus._USER_SERVICE_ERROR); // 응답 실패 (code != COMMON200)
                 }
 
-                cardBenefitExists = response.getResult();
+                memberBenefitExists = response.getResult();
 
             } catch (FeignException e) {
                 // 카드 서비스 자체와 통신 실패 (5xx, 연결 실패 등)
-                throw new GeneralException(ErrorStatus._CARD_SERVICE_ERROR);
+                throw new GeneralException(ErrorStatus._USER_SERVICE_ERROR);
             }
 
-            if (cardBenefitExists && "PENDING".equals(requestedStatus) && currentStatus != BenefitStatus.PENDING) {
+            if (memberBenefitExists && "PENDING".equals(requestedStatus) && currentStatus != BenefitStatus.PENDING) {
                 throw new GeneralException(ErrorStatus._ALREADY_EXIST_CARDBENEFIT);
             }
         }
@@ -148,16 +148,16 @@ public class BenefitServiceImpl implements BenefitService {
 
     @Override
     @Transactional
-    public List<CardBenefitReqDto.SyncCardBenefit> updateOngoingBenefits() {
+    public List<MemberBenefitReqDto.SyncMemberBenefit> updateOngoingBenefits() {
 
         LocalDate today = LocalDate.now();
-        List<CardBenefitReqDto.SyncCardBenefit> syncList = new ArrayList<>();
+        List<MemberBenefitReqDto.SyncMemberBenefit> syncList = new ArrayList<>();
         try {
             List<Benefit> targetBenefits = benefitRepository.findOngoingTargets(today);
 
             for (Benefit benefit : targetBenefits) {
                 benefit.setStatus(BenefitStatus.ONGOING);
-                syncList.add(new CardBenefitReqDto.SyncCardBenefit(
+                syncList.add(new MemberBenefitReqDto.SyncMemberBenefit(
                         benefit.getBenefitId(),
                         BenefitStatus.ONGOING.name()
                 ));
@@ -174,16 +174,16 @@ public class BenefitServiceImpl implements BenefitService {
 
     @Override
     @Transactional
-    public List<CardBenefitReqDto.SyncCardBenefit> updateExpiredBenefits() {
+    public List<MemberBenefitReqDto.SyncMemberBenefit> updateExpiredBenefits() {
 
         LocalDate today = LocalDate.now();
-        List<CardBenefitReqDto.SyncCardBenefit> syncList = new ArrayList<>();
+        List<MemberBenefitReqDto.SyncMemberBenefit> syncList = new ArrayList<>();
         try {
             List<Benefit> targetBenefits = benefitRepository.findExpiredTargets(today);
 
             for (Benefit benefit : targetBenefits) {
                 benefit.setStatus(BenefitStatus.EXPIRED);
-                syncList.add(new CardBenefitReqDto.SyncCardBenefit(
+                syncList.add(new MemberBenefitReqDto.SyncMemberBenefit(
                         benefit.getBenefitId(),
                         BenefitStatus.EXPIRED.name()
                 ));
@@ -202,13 +202,13 @@ public class BenefitServiceImpl implements BenefitService {
     public void updateAllAndSyncBenefits() {
         log.info("[트랜잭션] 혜택 + 카드혜택 상태 동기화 시작");
 
-        List<CardBenefitReqDto.SyncCardBenefit> syncList = new ArrayList<>();
+        List<MemberBenefitReqDto.SyncMemberBenefit> syncList = new ArrayList<>();
 
         syncList.addAll(updateOngoingBenefits());
         syncList.addAll(updateExpiredBenefits());
 
         try {
-            cardClient.syncCardBenefits(syncList);
+            userClient.syncMemberBenefits(syncList);
             log.info("[트랜잭션] 카드 서비스 상태 동기화 성공 ({}건)", syncList.size());
         } catch (Exception e) {
             log.error("[트랜잭션] 카드 서비스 동기화 실패 - 롤백 진행", e);

@@ -2,7 +2,7 @@ package org.example.omnibesponsor.service;
 
 import org.example.omnibesponsor.dto.BenefitReqDto;
 import org.example.omnibesponsor.dto.BenefitResDto;
-import org.example.omnibesponsor.dto.CardBenefitReqDto;
+import org.example.omnibesponsor.dto.MemberBenefitReqDto;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public interface BenefitService {
     List<BenefitResDto.GetBatchBenefit> getBatchBenefit(List<Long> benefitIds);
     BenefitResDto.UpdateBenefit updateBenefit(Long memeberId, Long benefitId, BenefitReqDto.UpdateBenefit updateBenefitDto);
     BenefitResDto.DeleteBenefit deleteBenefit(Long memeberId, Long benefitId);
-    List<CardBenefitReqDto.SyncCardBenefit> updateOngoingBenefits();
-    List<CardBenefitReqDto.SyncCardBenefit> updateExpiredBenefits();
+    List<MemberBenefitReqDto.SyncMemberBenefit> updateOngoingBenefits();
+    List<MemberBenefitReqDto.SyncMemberBenefit> updateExpiredBenefits();
     void updateAllAndSyncBenefits();
 }
