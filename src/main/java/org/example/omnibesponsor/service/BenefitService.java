@@ -2,7 +2,6 @@ package org.example.omnibesponsor.service;
 
 import org.example.omnibesponsor.dto.BenefitReqDto;
 import org.example.omnibesponsor.dto.BenefitResDto;
-import org.example.omnibesponsor.dto.CardBenefitReqDto;
 import org.example.omnibesponsor.dto.MemberBenefitReqDto;
 
 import java.util.List;

@@ -9,7 +9,6 @@ import org.example.omnibesponsor.common.apiPayload.exception.GeneralException;
 import org.example.omnibesponsor.converter.BenefitConverter;
 import org.example.omnibesponsor.dto.BenefitReqDto;
 import org.example.omnibesponsor.dto.BenefitResDto;
-import org.example.omnibesponsor.dto.CardBenefitReqDto;
 import org.example.omnibesponsor.dto.MemberBenefitReqDto;
 import org.example.omnibesponsor.entity.Benefit;
 import org.example.omnibesponsor.entity.Sponsor;

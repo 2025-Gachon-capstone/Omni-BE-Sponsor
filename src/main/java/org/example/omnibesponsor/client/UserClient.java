@@ -1,7 +1,6 @@
 package org.example.omnibesponsor.client;
 
 import org.example.omnibesponsor.common.apiPayload.ApiResult;
-import org.example.omnibesponsor.dto.CardBenefitReqDto;
 import org.example.omnibesponsor.dto.MemberBenefitReqDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
