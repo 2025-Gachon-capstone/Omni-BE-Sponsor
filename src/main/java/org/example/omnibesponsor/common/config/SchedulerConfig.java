@@ -25,5 +25,4 @@ public class SchedulerConfig {
             log.error("[스케줄러] 혜택 동기화 실패", e);
         }
     }
-
 }
